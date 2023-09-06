@@ -11,7 +11,7 @@ const PORT = process.env.PORT || 3001;
 
 const hbs = exphbs.create({
   helpers: {
-    format_date: function(date) {
+    format_date: function (date) {
       return new Date(date).toLocaleDateString()
     }
   }
@@ -32,6 +32,7 @@ const sess = {
 
 app.use(session(sess));
 
+app.use(express.static("public"))
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 

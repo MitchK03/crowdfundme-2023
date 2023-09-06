@@ -7,22 +7,32 @@ router.get('/', async (req, res) => {
     const projects = await Project.findAll({
       raw: true
     })
-    res.render('home', { projects })
+    res.render('home', { projects, loggedIn: req.session.logged_in })
   } catch(err) {
     res.status(500).json(err)
   }
 })
 
-router.get('/projects/:id', async(req, res) =>{
-try {
-  const project = await Project.findByPk(req.params.id, {
-    include: [{model: User}],
-    raw: true,
-  });
-  res.render('project', {...project, fundingReached: project.needed_funding === 0})
-}catch (err) {
-  res.status(500).json(err);
-}
+router.get('/projects/:id', async (req,res) => {
+    try {
+      const project = await Project.findByPk(req.params.id,{
+        include: [ {model: User} ],
+        raw: true,
+      });
+      console.log(project)
+      res.render('project', {...project, fundingReached: project.needed_funding === 0});
+    } catch (err) {
+      res.status(500).json(err);
+    }
 })
+
+router.get('/login', async (req, res) => {
+  try {
+    res.render('login')
+  } catch(err) {
+    res.status(500).json(err)
+  }
+})
+
 
 module.exports = router
